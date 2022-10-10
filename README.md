@@ -1,5 +1,6 @@
-# front
+# Front du projet Clone Trello
 
+Ce front est lié à l'API Laravel dans la branche "main" de ce repo, pour reproduire le comportement de Trello
 ## Project setup
 ```
 npm install

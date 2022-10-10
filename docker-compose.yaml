@@ -1,0 +1,52 @@
+version: "3.7"
+services:
+  app:
+    build:
+      args:
+        user: gary
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: api-react
+    container_name: api-react-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+      - ./php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - api-react
+  db:
+    image: mysql:5.7
+    container_name: api-react-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./docker-compose/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - api-react
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: api-react-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - api-react
+networks:
+  api-react:
+    driver: bridge
+volumes:
+  dbdata:
+    driver: local

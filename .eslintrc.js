@@ -6,13 +6,16 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
     '@vue/airbnb',
+    'prettier'
   ],
+  plugins: ['prettier'],
   parserOptions: {
     parser: 'babel-eslint',
   },
   rules: {
+    'prettier/prettier': ['error'],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
   },
   overrides: [
     {
@@ -24,5 +27,11 @@ module.exports = {
         jest: true,
       },
     },
+    {
+      files: ["*.vue"],
+      rules: {
+        'max-len': 'off' // disables line length check
+      }
+    }
   ],
 };
